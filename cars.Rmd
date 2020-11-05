@@ -1,0 +1,72 @@
+---
+title: "Analysis of variables and mpg from mtcars dataset"
+author: "Isha Apte"
+date: "05.11.2020"
+output:
+  slidy_presentation: default
+  html_document:
+    number_sections: yes
+    toc: yes
+  ioslides_presentation: default
+mode: selfcontained
+job: Reproducible Pitch Presentation
+subtitle: Variables and MPG
+highlighter: highlight.js
+widgets: bootstrap
+---
+
+
+
+## mtcars Dataset
+
+### Motor Trend Car Road Tests
+
+>This information was removed from the 1974 Motor Trend US magazine, and contains fuel utilization and 10 parts of car plan and execution for 32 cars (1973-74 models).
+
+### Source
+>Henderson and Velleman (1981), Building different relapse models intelligently. Biometrics, 37, 391-411.
+
+```{r}
+library(datasets)
+head(mtcars, 3)
+```
+---
+
+## Dataset with format
+
+**A data frame with 32 observations on 11 variables.**
+
+| Index | Field | Detail |
+------- | ----- | ------ |
+| [, 1] | mpg | Miles/(US) gallon |
+| [, 2]  | cyl | Number of cylinders |
+| [, 3]	| disp | Displacement (cu.in.) |
+| [, 4]	| hp | Gross horsepower |
+| [, 5]	| drat | Rear axle ratio |
+| [, 6]	| wt | Weight (lb/1000) |
+| [, 7]	| qsec | 1/4 mile time |
+| [, 8]	| vs | V/S |
+| [, 9]	| am | Transmission (0 = automatic, 1 = manual) |
+| [,10]	| gear | Number of forward gears |
+| [,11]	| carb | Number of carburetors |
+
+---
+
+## Analysis - Main Code
+
+```r
+  formulatext_p <- reactive({
+    paste("mpg ~", "as.integer(", input$variable, ")")  })
+  
+  fit <- reactive({
+    lm(as.formula(formulatext_p()), data=d)  })
+  ...
+  output$fit <- renderPrint({
+    summary(fit()) })
+  
+  output$mpgPlot <- renderPlot({
+    with(d, {
+      plot(as.formula(formulatext_p()))
+      abline(fit(), col=2)
+    })  })
+```
